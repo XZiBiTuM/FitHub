@@ -1,0 +1,12 @@
+{% load static %}
+
+<div id="order-section">
+    <button id="back-to-cart">Назад в корзину</button>
+    <form id="order-form" method="post" action="{% url 'order' %}" data-check-stock-url="{% url 'check_stock' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Оформить</button>
+    </form>
+</div>
+
+<script src="{% static 'order_script.js' %}"></script>

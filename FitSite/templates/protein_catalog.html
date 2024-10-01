@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Протеин</h1>
+
+    <!-- Фильтр по брендам -->
+    <form method="GET" action="">
+        <label for="brand">Бренд:</label>
+        <select name="brand" id="brand">
+            <option value="">Все бренды</option>
+            {% for brand in brands %}
+                <option value="{{ brand }}" {% if brand == selected_brand %}selected{% endif %}>{{ brand }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Сортировка по цене -->
+        <label for="sort_by">Сортировка по цене:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="">Без сортировки</option>
+            <option value="price" {% if sort_by == 'price' %}selected{% endif %}>По возрастанию</option>
+            <option value="-price" {% if sort_by == '-price' %}selected{% endif %}>По убыванию</option>
+        </select>
+
+        <button type="submit">Применить</button>
+    </form>
+
+    <ul>
+        {% for product in products %}
+            <li>
+                <a href="{% url 'product_detail' product.id %}">{{ product.title }}</a>
+                - {{ product.price }} руб.
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

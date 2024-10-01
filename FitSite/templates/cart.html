@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <h1>Корзина</h1>
+    <div id="cart-content">
+        {% if cart_items %}
+            <ul>
+                {% for item in cart_items %}
+                    <li data-product-id="{{ item.product.id }}">
+                        {{ item.product.title }} - {{ item.quantity }} шт. - {{ item.total_price }} руб.
+                        <button class="update-cart" data-action="increase" data-product-id="{{ item.product.id }}">+</button>
+                        <button class="update-cart" data-action="decrease" data-product-id="{{ item.product.id }}">-</button>
+                        <button class="remove-from-cart" data-product-id="{{ item.product.id }}">Удалить</button>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>Общая стоимость: <span id="total-price">{{ total_price }}</span> руб.</p>
+            <a href="#" id="order-button" class="btn btn-primary">Оформить заказ</a>
+        {% else %}
+            <p>Ваша корзина пуста.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Обновление количества товара в корзине
+            $('#cart-content').on('click', '.update-cart', function(e) {
+                e.preventDefault();
+                var productId = $(this).data('product-id');
+                var action = $(this).data('action');
+
+                $.ajax({
+                    url: '/update_cart_quantity/' + productId + '/' + action + '/',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(data) {
+                        updateCart(data);
+                    }
+                });
+            });
+
+            // Удаление товара из корзины
+            $('#cart-content').on('click', '.remove-from-cart', function(e) {
+                e.preventDefault();
+                var productId = $(this).data('product-id');
+
+                $.ajax({
+                    url: '/remove_from_cart/' + productId + '/',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(data) {
+                        updateCart(data);
+                    }
+                });
+            });
+
+            // Функция для обновления содержимого корзины
+            function updateCart(data) {
+                var cartContent = '';
+                $.each(data.cart_items, function(index, item) {
+                    cartContent += '<li data-product-id="' + item.id + '">';
+                    cartContent += item.title + ' - ' + item.quantity + ' шт. - ' + item.total_price + ' руб.';
+                    cartContent += '<button class="update-cart" data-action="increase" data-product-id="' + item.id + '">+</button>';
+                    cartContent += '<button class="update-cart" data-action="decrease" data-product-id="' + item.id + '">-</button>';
+                    cartContent += '<button class="remove-from-cart" data-product-id="' + item.id + '">Удалить</button>';
+                    cartContent += '</li>';
+                });
+                $('#cart-content ul').html(cartContent);
+                $('#total-price').text(data.total_price);
+            }
+        });
+    </script>
+{% endblock %}

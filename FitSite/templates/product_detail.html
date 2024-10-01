@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>{{ product.title }}</h1>
+
+    <li>{{ product.short_description }}</li>
+
+    <p>Бренд: {{ product.brand }}</p>
+    <p>Цена: <span id="price-display">{{ product.price }} руб.</span></p>
+    <p>Описание: {{ product.product_detail.description }}</p>
+    <p>Состав: {{ product.product_detail.compound }}</p>
+    <p>Количество: {{ product.quantity }} шт.</p>
+    <p>Срок годности: {{ product.product_detail.expiration_date }} мес.</p>
+
+    <p>Изображения:</p>
+    <ul>
+        {% for image in product.images.all %}
+            <li><img src="{{ image.image.url }}" alt="{{ image.title }}"></li>
+        {% endfor %}
+    </ul>
+
+    <form id="cart-form" action="{% url 'add_to_cart' product.id %}" method="post">
+        {% csrf_token %}
+        <button type="button" id="add-to-cart-button">Добавить в корзину</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'pr_detail_script.js' %}"></script>
+{% endblock %}

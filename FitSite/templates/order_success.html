@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказ успешно оформлен</title>
+</head>
+<body>
+    <h1>Спасибо за ваш заказ!</h1>
+    <p>Ваш заказ был успешно оформлен.</p>
+    <a href="#" id="back-to-main">Вернуться на главную</a>
+</body>
+</html>
+
+<script>
+    $(document).ready(function() {
+        $('#back-to-main').on('click', function(e) {
+            e.preventDefault();
+            $('#cart-sidebar').removeClass('show');
+        });
+    });
+</script>

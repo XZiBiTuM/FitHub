@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <a href="{% url 'protein_catalog' %}">Протеин</a>
+    <a href="{% url 'creatine_catalog' %}">Креатин</a>
+    <a href="{% url 'gainer_catalog' %}">Гейнер</a>
+    <a href="{% url 'sport_bars_catalog' %}">Спортивные батончики</a>
+{% endblock %}

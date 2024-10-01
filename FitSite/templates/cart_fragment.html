@@ -1,0 +1,18 @@
+    <div id="cart-content">
+        {% if cart_items %}
+            <ul>
+                {% for item in cart_items %}
+                    <li data-product-id="{{ item.product.id }}">
+                        {{ item.product.title }} - {{ item.quantity }} шт. - {{ item.total_price }} руб.
+                        <button class="update-cart" data-action="increase" data-product-id="{{ item.product.id }}">+</button>
+                        <button class="update-cart" data-action="decrease" data-product-id="{{ item.product.id }}">-</button>
+                        <button class="remove-from-cart" data-product-id="{{ item.product.id }}">Удалить</button>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>Общая стоимость: <span id="total-price">{{ total_price }}</span> руб.</p>
+            <a href="#" id="order-button" class="btn btn-primary">Оформить заказ</a>
+        {% else %}
+            <p>Ваша корзина пуста.</p>
+        {% endif %}
+    </div>
